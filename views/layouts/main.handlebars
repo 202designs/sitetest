@@ -2,6 +2,9 @@
 <html>
 <head>
 	<title> Matt Site</title>
+	{{#if showTests}}
+		<link rel = "stylesheet" href="/vendor/mocha.css">
+	{{/if}}
 	<link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
@@ -66,5 +69,19 @@
             </div>
           </div>
     </footer>
+    {{#if showTests}}
+    	<div id = "mocha"></div>
+    	<script src="/vendor/mocha.js"></script>
+    	<script src = "/vendor/chai.js"></script>
+    	<script>mocha.ui('tdd');
+    			var assert = chai.assert;
+    	</script>
+    	<script src = "/qa/tests-global.js">
+    	</script>
+    	{{#if pageTestScript}}
+    			<script src="{{pageTestScript}}"></script>
+		{{/if}}
+			<script>mocha.run();</script>
+		{{/if}}
 </body>
 </html>

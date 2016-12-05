@@ -1,13 +1,10 @@
 var express = require('express');
 var app = express();
+var fortune = require('./lib/fortune.js');
+var myWork = require('./lib/myWork.js');
 
 app.set ('port', process.env.PORT ||3000);
-var mywork = [  "Web Design",
-				"Database Design",
-				"Other Stuff",
-				"New Things",
-				"A lot of drinking"
-];
+
 
 //handlebars view engine
 var handlebars = require('express-handlebars')
@@ -17,22 +14,26 @@ app.set('view engine','handlebars');
 
 //static files directory description
 app.use(express.static(__dirname + '/public'));
-
+//querystring used for testing
+app.use(function(req,res,next){
+	res.locals.showTests = app.get('env') !== 'production' &&
+	req.query.test === '1';
+	next();
+});
 //routes
 //home
 app.get('/',function(req,res){
 	res.render('sitehome');
 });
-// about
+// about with function to pull myWork Array
 app.get('/about',function(req,res){
-	var myWorkRandom = mywork[Math.floor(Math.random() * mywork.length)];
-	res.render('about',{mywork: myWorkRandom});
+	res.render('about', {fortune: fortune.getFortune()});
 	console.log('about');
 });
 
 //contact
 app.get('/contact',function(req,res){
-	res.render('contact');
+	res.render('contact', { myWork: myWork.contact()});
 	console.log('contact');
 });
 
